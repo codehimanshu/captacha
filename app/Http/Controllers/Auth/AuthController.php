@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 use Socialite;
 
@@ -90,7 +89,7 @@ class AuthController extends Controller
         $user1->name=$user->getName();
         $user1->nickname=$user->getNickname();
         $user1->avatar=$user->getAvatar();
-        $user1->hash=Hash::make(str_random(8));
+        $user1->hash=str_random(24);
 
         if($user1->checkexistinguser($user->getEmail())==0)
             $user1->save();

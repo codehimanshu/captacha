@@ -16,6 +16,7 @@ Route::get('/', 'HomeController@index');
 Route::auth();
 
 Route::get('login', 'Auth\AuthController@redirectToProvider');
-Route::get('register', 'HomeController@index');
+Route::get('register', 'Auth\AuthController@redirectToProvider');
 Route::get('callback/google', 'Auth\AuthController@handleProviderCallback');
 Route::get('logout', 'Auth\AuthController@logout');
+Route::get('generate/{hash}', 'HomeController@generate');
