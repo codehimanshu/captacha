@@ -23,4 +23,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function checkexistinguser($email)
+    {
+        return User::where('email',$email)->count();
+    }
 }

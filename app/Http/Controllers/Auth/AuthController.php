@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+
+use Socialite;
 
 class AuthController extends Controller
 {
@@ -69,4 +73,30 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('google')->user();
+
+        $user1 = new User;
+        $user1->name=$user->getName();
+        $user1->email=$user->getEmail();
+        $user1->nickname=$user->getNickname();
+        $user1->avatar=$user->getAvatar();
+
+        if(!$user1->checkexistinguser($user->getEmail()))
+            $user1->save();
+
+        $user2 = User::where('email',$user1->email)->first();
+
+        Auth::login($user2);
+
+        return redirect('/');
+    }
+
 }
