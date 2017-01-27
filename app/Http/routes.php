@@ -11,13 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
-
 Route::get('login', 'Auth\AuthController@redirectToProvider');
+Route::get('register', 'HomeController@index');
 Route::get('callback/google', 'Auth\AuthController@handleProviderCallback');
+Route::get('logout', 'Auth\AuthController@logout');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use Socialite;
 
@@ -84,18 +85,26 @@ class AuthController extends Controller
         $user = Socialite::driver('google')->user();
 
         $user1 = new User;
-        $user1->name=$user->getName();
+
         $user1->email=$user->getEmail();
+        $user1->name=$user->getName();
         $user1->nickname=$user->getNickname();
         $user1->avatar=$user->getAvatar();
+        $user1->hash=Hash::make(str_random(8));
 
-        if(!$user1->checkexistinguser($user->getEmail()))
+        if($user1->checkexistinguser($user->getEmail())==0)
             $user1->save();
 
         $user2 = User::where('email',$user1->email)->first();
 
         Auth::login($user2);
 
+        return redirect('/');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
         return redirect('/');
     }
 
