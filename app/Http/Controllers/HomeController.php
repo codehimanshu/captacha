@@ -41,23 +41,25 @@ class HomeController extends Controller
     {
         if(User::where('hash',$hash)->count())
         {
-            $len = rand(5,7);
+            $len = rand(5,6);
             $str = str_random($len);
-            $img = Image::canvas(70, 30, '#A9A9A9');
+            $path = public_path();
+            $font_file = $path.'/font.ttf';
+            $img = Image::canvas(150, 60, '#A9A9A9');
             for($i=1;$i<6;$i++)
             {
-                $y1=rand(1, 30);
-                $y2=rand(1,30);
-                $x1=rand(1,60);
-                $x2=rand(1,60);
+                $y1=rand(1,60);
+                $y2=rand(1,60);
+                $x1=rand(1,150);
+                $x2=rand(1,150);
                 $img->line($x1, $y1, $x2, $y2);
             }
             $img->blur(1);
-            $img->text($str,10,20,function($font){
+            $img->text($str,20,50,function($font){
                 $face = rand(1,5);
-                $font->file($face);
-                $font->size(48);
-                $font->angle(20);
+                $font->file(public_path().'/font.ttf');
+                $font->size(20);
+                $font->angle(4);
             });
             $img->pixelate(1);
             header('Content-Type: image/png');
